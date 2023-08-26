@@ -34,4 +34,11 @@ class MineTwoPointersTest {
         };
         int[][] ints = MineTwoPointers.mergeOverlappingIntervals(interval);
     }
+
+    @Test
+    void sweetAndSavory() {
+        int[] ints = MineTwoPointers.sweetAndSavory(new int[]{-3, -5, 1, 7}, 8);
+        Arrays.stream(ints).forEach(System.out::println);
+
+    }
 }

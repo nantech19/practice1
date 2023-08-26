@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -53,6 +54,60 @@ public class MineTwoPointers {
 
         return mergedIntervals.toArray(new int[mergedIntervals.size()][]);
     }
+
+    public static int[] sweetAndSavory(int[] dishes, int target) {
+        List<Integer> sweetDishes= new ArrayList<>();
+        List<Integer> savoryDishes= new ArrayList<>();
+        for(int dish: dishes){
+            if(dish<0){
+                sweetDishes.add(dish);
+            }else{
+                savoryDishes.add(dish);
+            }
+        }
+
+        sweetDishes.sort(Comparator.comparingInt(Math::abs));  // o(n*logn) because of sorting
+        savoryDishes.sort(Comparator.naturalOrder());// o(n*logn) because of sorting
+
+
+        int[] result= new int[2];
+        int startSweet=0;
+        int startSavory=0;
+        int reachToTarget=Integer.MAX_VALUE;
+        while(startSweet< sweetDishes.size() && startSavory< savoryDishes.size()){
+            int currentSweet=sweetDishes.get(startSweet);
+            int currentSavory=savoryDishes.get(startSweet);
+            int currentDiff=currentSweet +currentSavory;
+            System.out.println(currentDiff);
+            if(currentDiff <= target){  // because not too savoury
+                int currentReach=target-currentDiff;
+                if(currentReach < reachToTarget){
+                    reachToTarget=currentReach;
+                    result[0]=currentSweet;
+                    result[1]=currentSavory;
+                }
+                startSavory++;
+            }
+            else {
+                startSweet++;
+            }
+        }
+        return result;
+    }
+
+
+
+//    [1,2,3,4,6,8,9]     // (n*logn)
+//     ^           ^    =10
+//       ^         ^    =11
+//         ^       ^    =12
+//           ^     ^    =13
+//             ^   ^    =15
+//             ^ ^      =14  o(n)
+
+//    14
+
+
 
 
 }
