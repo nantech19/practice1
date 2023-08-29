@@ -51,6 +51,7 @@ public class MineString {
             }
         }
         return -1;
+
     }
 
     public static boolean generateDocument(String characters, String document) {
