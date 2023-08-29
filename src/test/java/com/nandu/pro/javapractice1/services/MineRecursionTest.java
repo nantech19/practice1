@@ -3,7 +3,8 @@ package com.nandu.pro.javapractice1.services;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import javax.validation.constraints.Min;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -29,5 +30,15 @@ public class MineRecursionTest {
     @Test
     void phoneNumberMnemonics() {
         List<String> strings = MineRecursion.phoneNumberMnemonics("1905");
+    }
+
+    @Test
+    void getPermutations() {
+        List<Integer> objects = new ArrayList<>();
+        objects.add(1);
+        objects.add(2);
+        objects.add(3);
+
+        MineRecursion.getPermutations(Arrays.asList(1, 2, 3));
     }
 }

@@ -59,4 +59,39 @@ public class MineRecursion {
 
         return collect1;
     }
+
+    public static List<List<Integer>> getPermutations(List<Integer> array) {
+        List<Integer> copyArray= new ArrayList<>();
+        array.forEach(a-> copyArray.add(a));
+
+        List<List<Integer>> permResult= new ArrayList<>();
+        // if(array.size()==0){
+        //   return permResult;
+        // }
+        // base case
+        if(copyArray.size()==1){
+           // List<List<Integer>> copy1Array= new ArrayList<>();
+            List<Integer> copy2Array= new ArrayList<>();
+
+            copy2Array.add(copyArray.get(0));
+         //   copy1Array.add(copy2Array);
+            return new ArrayList<List<Integer>>(Collections.singleton(copy2Array));
+           // return copy1Array;
+//            array.forEach(a-> copy1Array.add(a));
+//            return List.of(List.of(copyArray.get(0)));
+        }
+        for(int i=0 ; i< copyArray.size(); i++){  // 1,2,3-- 2,3
+            int removedInt = copyArray.remove(0);//2,3 --3
+            List<List<Integer>> currentPerm= getPermutations(copyArray); //[[3]]
+
+            for(List<Integer> perm: currentPerm){
+                perm.forEach(a-> System.out.print(a));
+                perm.add(removedInt);  //[2,3] [3,2]
+            }
+            permResult.addAll(currentPerm);
+            copyArray.add(removedInt);
+        }
+        return permResult;
+    }
+
 }
