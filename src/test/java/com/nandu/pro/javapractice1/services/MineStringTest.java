@@ -19,12 +19,25 @@ class MineStringTest {
     void generateDocument() {
         String characters = "Bste!hetsi ogEAxpelrt x ";
         String document = "AlgoExpert is the Best!";
-        MineString.generateDocument(characters,document);
+
+        MineString.generateDocument(characters, document);
+
     }
 
     @Test
     void longestPalindrome() {
         String abaxyzzyxf = MineString.longestPalindrome("abaxyzzyxf");
+    }
+
+
+    @Test
+    void isPallindrome() {
+    }
+
+    @Test
+    void minimumCharactersForWords() {
+        String[] input = new String[]{"this", "that", "did", "deed", "them!", "a"};
+        MineString.minimumCharactersForWords(input);
     }
 
 }
