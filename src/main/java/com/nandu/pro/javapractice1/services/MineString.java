@@ -1,9 +1,6 @@
 package com.nandu.pro.javapractice1.services;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class MineString {
 
@@ -109,5 +106,45 @@ public class MineString {
         }
         System.out.println("found True ->" + str);
         return true;
+    }
+
+    public static char[] minimumCharactersForWords(String[] words) {
+        Map<Character, Integer> freqCount = new HashMap<>();
+
+        for (String word : words) {
+            Map<Character, Integer> currentFreq = new HashMap<>();
+
+            for (int j = 0; j < word.length(); j++) {
+                char[] currentWord = word.toCharArray();
+                if (currentFreq.containsKey(currentWord[j])) {
+                    currentFreq.put(currentWord[j], currentFreq.get(currentWord[j]) + 1);
+                } else {
+                    currentFreq.put(currentWord[j], 1);
+                }
+            }
+            updateMaxFreq(currentFreq, freqCount);
+        }
+
+        return freqCount.entrySet().stream()
+                .flatMap(a -> {
+                    List<Character> collect = java.util.stream.Stream.generate(a::getKey)
+                            .limit(a.getValue())
+                            .collect(java.util.stream.Collectors.toList());
+                    return collect.stream();
+                }).map(Character::charValue) // Convert Character objects to char primitives
+                .collect(StringBuilder::new, StringBuilder::append, StringBuilder::append)
+                .toString()
+                .toCharArray();
+    }
+
+    private static void updateMaxFreq(Map<Character, Integer> temp, Map<Character, Integer> result) {
+
+        for (Map.Entry<Character, Integer> aVal : temp.entrySet()) {
+            if (result.containsKey(aVal.getKey())) {
+                result.put(aVal.getKey(), Math.max(aVal.getValue(), result.get(aVal.getKey())));
+            } else {
+                result.put(aVal.getKey(), aVal.getValue());
+            }
+        }
     }
 }
