@@ -3,108 +3,41 @@ package com.nandu.pro.javapractice1.services;
 import java.util.*;
 
 public class MineGraph {
-    public static List<Integer> findBuildOrder(int numTables, int[][] dependencies) {
-        // Create adjacency list to represent the graph
-        List<List<Integer>> graph = new ArrayList<>(numTables);
-        for (int i = 0; i < numTables; i++) {
-            graph.add(new ArrayList<>());
-        }
 
-        // Calculate in-degrees for each table
-        int[] inDegree = new int[numTables];
-        for (int[] dependency : dependencies) {
-            int parent = dependency[1];
-            int child = dependency[0];
-            graph.get(parent).add(child);
-            inDegree[child]++;
-        }
-
-        // Perform topological sorting using a queue
-        Queue<Integer> queue = new LinkedList<>();
-        for (int i = 0; i < numTables; i++) {
-            if (inDegree[i] == 0) {
-                queue.offer(i);
-            }
-        }
+    public static List<Integer> topologicalSort(List<Integer> jobs, List<int[]> deps) {
+        Map<Integer, List<Integer>> graph = createAdjacencyList(deps);
 
         List<Integer> result = new ArrayList<>();
-        while (!queue.isEmpty()) {
-            int table = queue.poll();
-            result.add(table);
-            for (int neighbor : graph.get(table)) {
-                inDegree[neighbor]--;
-                if (inDegree[neighbor] == 0) {
-                    queue.offer(neighbor);
-                }
-            }
+        Set<Integer> visitedNode = new HashSet<>();
+        for (int aJob : jobs) {
+            runDfs(graph, aJob, visitedNode, result);
         }
-
-        // Check for circular dependencies
-        if (result.size() != numTables) {
-            return Collections.emptyList(); // Circular dependencies detected
-        }
-
         return result;
     }
 
-    public static void main(String[] args) {
-        int numTables = 4;
-        int[][] dependencies = {
-                {1, 0},
-                {2, 0},
-                {3, 1},
-                {3, 2}
-        };
-
-        List<Integer> buildOrder = findBuildOrder(numTables, dependencies);
-        if (buildOrder.isEmpty()) {
-            System.out.println("Error: Circular Dependencies");
-        } else {
-            System.out.println("Build Order: " + buildOrder);
+    private static void runDfs(Map<Integer, List<Integer>> graph, Integer key, Set<Integer> visitedNode, List<Integer> result) {
+        if (key == null) {
+            return;
+        }
+        if (visitedNode.contains(key)) {
+            return;
+        }
+        visitedNode.add(key);
+        result.add(key);
+        for (Integer neighbour : graph.get(key)) {
+            runDfs(graph, neighbour, visitedNode, result);
         }
     }
 
-    public static List<Integer> findBuildOrderDfs(int numTables, int[][] dependencies) {
-        // Create adjacency list to represent the graph
-        List<List<Integer>> graph = new ArrayList<>(numTables);
-        for (int i = 0; i < numTables; i++) {
-            graph.add(new ArrayList<>());
+    public static Map<Integer, List<Integer>> createAdjacencyList(List<int[]> jobDependency) {
+        Map<Integer, List<Integer>> adjacent = new HashMap<>();
+        for (int[] ints : jobDependency) {
+            adjacent.putIfAbsent(ints[0], new ArrayList<>());
+            adjacent.putIfAbsent(ints[1], new ArrayList<>());
+            adjacent.get(ints[0]).add(ints[1]);
         }
-
-        // Calculate in-degrees for each table
-        int[] inDegree = new int[numTables];
-        for (int[] dependency : dependencies) {
-            int parent = dependency[1];
-            int child = dependency[0];
-            graph.get(parent).add(child);
-            inDegree[child]++;
-        }
-
-        List<Integer> result = new ArrayList<>();
-        for (int i = 0; i < numTables; i++) {
-            if (inDegree[i] == 0) {
-//                dfs(i, graph, result);
-//                run dfs here
-            }
-        }
-
-        // Check for circular dependencies
-        if (result.size() != numTables) {
-            return Collections.emptyList(); // Circular dependencies detected
-        }
-
-        // Reverse the result to get the correct build order
-        Collections.reverse(result);
-        return result;
+        System.out.println(adjacent);
+        return adjacent;
     }
-
-   /* private static void dfs(int table, List<List<Integer>> graph, List<Integer> result) {
-        result.add(table);
-        for (int neighbor : graph.get(table)) {
-            if (--inDegree[neighbor] == 0) {
-                dfs(neighbor, graph, result);
-            }
-        }
-    }*/
 
 }
